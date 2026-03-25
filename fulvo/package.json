@@ -6,10 +6,15 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "migrate:create": "node-pg-migrate create -m ./migrations",
+    "migrate:up": "node-pg-migrate up -m ./migrations -d DATABASE_URL",
+    "migrate:down": "node-pg-migrate down -m ./migrations -d DATABASE_URL"
   },
   "dependencies": {
+    "bcryptjs": "^3.0.2",
     "next": "16.2.1",
+    "pg": "^8.16.3",
     "react": "19.2.4",
     "react-dom": "19.2.4"
   },
@@ -17,6 +22,7 @@
     "@tailwindcss/postcss": "^4",
     "eslint": "^9",
     "eslint-config-next": "16.2.1",
+    "node-pg-migrate": "^8.0.3",
     "tailwindcss": "^4"
   }
 }
