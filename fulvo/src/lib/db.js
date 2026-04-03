@@ -19,6 +19,7 @@ function getPool() {
   return pool;
 }
 
+// Function to create a new user in the database with the provided username and hashed password.
 export async function createUser({ username, passwordHash }) {
   const result = await getPool().query(
     `
@@ -27,6 +28,19 @@ export async function createUser({ username, passwordHash }) {
       RETURNING id, username, created_at;
     `,
     [username, passwordHash],
+  );
+  return result.rows[0];
+}
+
+// Function to retrieve a user from the database by their username.
+export async function getUserByUsername(username) {
+  const result = await getPool().query(
+    `
+      SELECT id, username, password, created_at
+      FROM "user"
+      WHERE username = $1;
+    `,
+    [username],
   );
 
   return result.rows[0];
