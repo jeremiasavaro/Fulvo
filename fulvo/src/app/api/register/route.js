@@ -14,19 +14,19 @@ function validatePayload(payload) {
       : "";
 
   if (!username || !password || !passwordConfirmation) {
-    return { ok: false, message: "username, password y password_confirmation son requeridos" };
+    return { ok: false, message: "El nombre de usuario, y la contraseña son requeridos" };
   }
 
   if (username.length < 3) {
-    return { ok: false, message: "username debe tener al menos 3 caracteres" };
+    return { ok: false, message: "El nombre de usuario debe tener al menos 3 caracteres" };
   }
 
   if (password.length < 8) {
-    return { ok: false, message: "password debe tener al menos 8 caracteres" };
+    return { ok: false, message: "La contraseña debe tener al menos 8 caracteres" };
   }
 
   if (password !== passwordConfirmation) {
-    return { ok: false, message: "password y password_confirmation no coinciden" };
+    return { ok: false, message: "Las contraseñas no coinciden" };
   }
 
   return { ok: true, username, password };
@@ -50,13 +50,13 @@ export async function POST(request) {
     return Response.json({ user }, { status: 201 });
   } catch (error) {
     if (error?.code === "23505") {
-      return Response.json({ error: "username ya existe" }, { status: 409 });
+      return Response.json({ error: "El nombre de usuario ya existe" }, { status: 409 });
     }
 
     if (error instanceof SyntaxError) {
-      return Response.json({ error: "JSON invalido" }, { status: 400 });
+      return Response.json({ error: "El JSON es inválido" }, { status: 400 });
     }
 
-    return Response.json({ error: "error interno" }, { status: 500 });
+    return Response.json({ error: "Error interno" }, { status: 500 });
   }
 }
