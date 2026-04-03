@@ -44,11 +44,17 @@ export async function POST(request) {
       return Response.json({ error: validated.message }, { status: 400 });
     }
 
-    const passwordHash = await bcrypt.hash(validated.password, 12);
+    const passwordHash = await bcrypt.hash(validated.password, 12);    
     const user = await createUser({ username: validated.username, passwordHash });
 
-    return Response.json({ user }, { status: 201 });
+    const safeUser = {
+      id: String(user.id),
+      username: user.username,
+    };
+
+    return Response.json({ user: safeUser }, { status: 201 });
   } catch (error) {
+    console.error("[API] Exception error in registration route:", error);
     if (error?.code === "23505") {
       return Response.json({ error: "El nombre de usuario ya existe" }, { status: 409 });
     }
