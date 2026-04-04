@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -16,10 +17,14 @@ export default function RegisterForm() {
     setMessage("");
 
     const formData = new FormData(form);
+    const username = String(formData.get("username") || "").trim();
+    const password = String(formData.get("password") || "");
+    const passwordConfirmation = String(formData.get("password_confirmation") || "");
+
     const body = {
-      username: formData.get("username"),
-      password: formData.get("password"),
-      password_confirmation: formData.get("password_confirmation"),
+      username,
+      password,
+      password_confirmation: passwordConfirmation,
     };
 
     try {
@@ -42,11 +47,23 @@ export default function RegisterForm() {
         return;
       }
 
+      const loginResult = await signIn("credentials", {
+        username,
+        password,
+        redirect: false,
+      });
+
+      if (!loginResult || loginResult.error) {
+        setStatus("error");
+        setMessage("Usuario creado, pero no se pudo iniciar sesion automaticamente");
+        return;
+      }
+
       form.reset();
       setStatus("success");
-      const createdUsername = result?.user?.username || body.username;
-      setMessage(`Usuario ${createdUsername} creado correctamente`);
-      router.push("/");
+      const createdUsername = result?.user?.username || username;
+      setMessage(`Usuario ${createdUsername} creado e ingresado correctamente`);
+      router.push("/feed");
       router.refresh();
     } catch {
       setStatus("error");

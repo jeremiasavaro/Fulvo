@@ -1,4 +1,5 @@
 import "./globals.css";
+import SessionProvider from "@/components/auth/SessionProvider";
 
 export const metadata = {
   title: "Fulvo",
@@ -6,5 +7,11 @@ export const metadata = {
 };
 
 export default function RootLayout({ children }) {
-  return <html lang="es"><body>{children}</body></html>;
+  return (
+    <html lang="es">
+      <body>
+        <SessionProvider>{children}</SessionProvider>
+      </body>
+    </html>
+  );
 }

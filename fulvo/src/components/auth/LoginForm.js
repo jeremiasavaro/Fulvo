@@ -1,9 +1,12 @@
 "use client";
 
 import Link from "next/link";
+import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default function LoginForm() {
+  const router = useRouter();
   const [status, setStatus] = useState("idle");
   const [message, setMessage] = useState("");
 
@@ -13,28 +16,26 @@ export default function LoginForm() {
     setMessage("");
 
     const formData = new FormData(event.currentTarget);
-    const body = {
-      username: formData.get("username"),
-      password: formData.get("password"),
-    };
+    const username = String(formData.get("username") || "").trim();
+    const password = String(formData.get("password") || "");
 
     try {
-      const response = await fetch("/api/session", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body),
+      const result = await signIn("credentials", {
+        username,
+        password,
+        redirect: false,
       });
 
-      const result = await response.json();
-
-      if (!response.ok) {
+      if (!result || result.error) {
         setStatus("error");
-        setMessage(result?.error || "No se pudo iniciar sesion");
+        setMessage("Usuario o contrasena incorrectos");
         return;
       }
 
       setStatus("success");
-      setMessage(result?.message || "Credenciales validadas correctamente");
+      setMessage("Sesion iniciada correctamente");
+      router.push("/feed");
+      router.refresh();
     } catch {
       setStatus("error");
       setMessage("No se pudo conectar con el servidor");

@@ -11,7 +11,7 @@ Proyecto Next.js minimo con backend basico para registro de usuarios.
 ## Configuracion
 
 1. Copiar `.env.example` a `.env.local`
-2. Ajustar `DATABASE_URL`
+2. Ajustar `DATABASE_URL` y `AUTH_SECRET`
 3. Ejecutar migraciones
 
 ## Comandos
@@ -50,6 +50,19 @@ La app queda en `http://localhost:3000`.
 	"password_confirmation": "12345678"
 }
 ```
+
+## Autenticacion y sesion
+
+- NextAuth con provider de credenciales en `src/lib/auth.js`
+- Endpoint auth: `POST/GET /api/auth/[...nextauth]`
+- Login en `/login`
+- Registro en `/register` con auto-login
+- Ruta privada de ejemplo: `/feed`
+- Proteccion de ruta optimista con `src/proxy.js`
+
+Para una guia de uso de `current_user`, ver:
+
+- `features/nextauth-current-user.md`
 
 ## Base de datos
 
