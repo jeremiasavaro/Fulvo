@@ -15,7 +15,7 @@ export default async function Home() {
 
         {currentUser?.id ? (
           <p className="mt-3 text-sm text-emerald-700">
-            Sesion iniciada como <span className="font-medium">{currentUser.username}</span>
+            Sesion iniciada como <span className="font-medium">{currentUser.full_name}</span> ({currentUser.email})
           </p>
         ) : (
           <p className="mt-3 text-sm text-neutral-600">No hay sesion activa.</p>
@@ -37,18 +37,9 @@ export default async function Home() {
               href="/login"
               className="rounded-lg bg-neutral-900 px-4 py-2 text-center text-sm font-medium text-white transition hover:bg-neutral-700"
             >
-              Ir a Login
+              Ir a Auth
             </Link>
           )}
-
-          {!currentUser?.id ? (
-            <Link
-              href="/register"
-              className="rounded-lg border border-neutral-300 px-4 py-2 text-center text-sm font-medium text-neutral-900 transition hover:bg-neutral-100"
-            >
-              Ir a Register
-            </Link>
-          ) : null}
         </div>
       </section>
     </main>

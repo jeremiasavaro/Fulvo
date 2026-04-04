@@ -1,5 +1,25 @@
 @import "tailwindcss";
 
+:root {
+  --surface: #f6f6f9;
+  --on-surface: #2d2f31;
+  --primary: #006a35;
+  --primary-dim: #005c2d;
+}
+
+@theme inline {
+  --font-body: var(--font-manrope);
+  --font-headline: var(--font-lexend);
+}
+
 body {
-  @apply bg-white text-neutral-900;
+  @apply bg-white text-neutral-900 antialiased;
+}
+
+.font-headline {
+  font-family: var(--font-lexend), sans-serif;
+}
+
+.font-body {
+  font-family: var(--font-manrope), sans-serif;
 }

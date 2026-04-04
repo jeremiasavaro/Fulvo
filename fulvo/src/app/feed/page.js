@@ -27,7 +27,10 @@ export default async function FeedPage() {
             <span className="font-medium">current_user.id:</span> {session.user.id}
           </p>
           <p className="mt-1 text-sm text-neutral-700">
-            <span className="font-medium">current_user.username:</span> {session.user.username}
+            <span className="font-medium">current_user.full_name:</span> {session.user.full_name}
+          </p>
+          <p className="mt-1 text-sm text-neutral-700">
+            <span className="font-medium">current_user.email:</span> {session.user.email}
           </p>
         </div>
 
