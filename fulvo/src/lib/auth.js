@@ -1,6 +1,6 @@
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
-import { getUserByUsername } from "@/lib/db";
+import { getUserByEmail } from "@/lib/db";
 
 export const authOptions = {
   secret: process.env.AUTH_SECRET || process.env.NEXTAUTH_SECRET,
@@ -15,20 +15,20 @@ export const authOptions = {
   providers: [
     CredentialsProvider({
       credentials: {
-        username: { label: "Username", type: "text" },
+        email: { label: "Email", type: "email" },
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        const username =
-          typeof credentials?.username === "string" ? credentials.username.trim() : "";
+        const email =
+          typeof credentials?.email === "string" ? credentials.email.trim().toLowerCase() : "";
         const password =
           typeof credentials?.password === "string" ? credentials.password : "";
 
-        if (!username || !password) {
+        if (!email || !password) {
           return null;
         }
 
-        const user = await getUserByUsername(username);
+        const user = await getUserByEmail(email);
 
         if (!user) {
           return null;
@@ -42,8 +42,9 @@ export const authOptions = {
 
         return {
           id: String(user.id),
-          name: user.username,
-          username: user.username,
+          name: user.full_name,
+          email: user.email,
+          full_name: user.full_name,
         };
       },
     }),
@@ -52,7 +53,8 @@ export const authOptions = {
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id;
-        token.username = user.username;
+        token.email = user.email;
+        token.full_name = user.full_name;
       }
 
       return token;
@@ -60,7 +62,9 @@ export const authOptions = {
     async session({ session, token }) {
       if (session.user) {
         session.user.id = token.id;
-        session.user.username = token.username;
+        session.user.email = token.email;
+        session.user.full_name = token.full_name;
+        session.user.name = token.full_name;
       }
 
       return session;

@@ -19,28 +19,28 @@ function getPool() {
   return pool;
 }
 
-// Function to create a new user in the database with the provided username and hashed password.
-export async function createUser({ username, passwordHash }) {
+// Creates a new user with profile data and a hashed password.
+export async function createUser({ fullName, dni, email, city, birthDate, age, passwordHash }) {
   const result = await getPool().query(
     `
-      INSERT INTO "user" (username, password)
-      VALUES ($1, $2)
-      RETURNING id, username, created_at;
+      INSERT INTO "user" (full_name, dni, email, city, birth_date, age, password)
+      VALUES ($1, $2, $3, $4, $5, $6, $7)
+      RETURNING id, full_name, dni, email, city, birth_date, age, created_at;
     `,
-    [username, passwordHash],
+    [fullName, dni, email, city, birthDate, age, passwordHash],
   );
   return result.rows[0];
 }
 
-// Function to retrieve a user from the database by their username.
-export async function getUserByUsername(username) {
+// Retrieves a user by normalized email for credential sign-in.
+export async function getUserByEmail(email) {
   const result = await getPool().query(
     `
-      SELECT id, username, password, created_at
+      SELECT id, full_name, dni, email, city, birth_date, age, password, created_at
       FROM "user"
-      WHERE username = $1;
+      WHERE email = $1;
     `,
-    [username],
+    [email],
   );
 
   return result.rows[0];
