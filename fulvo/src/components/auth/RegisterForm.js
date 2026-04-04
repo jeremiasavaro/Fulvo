@@ -2,11 +2,9 @@
 
 import Link from "next/link";
 import { signIn } from "next-auth/react";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default function RegisterForm() {
-  const router = useRouter();
   const [status, setStatus] = useState("idle");
   const [message, setMessage] = useState("");
 
@@ -51,6 +49,7 @@ export default function RegisterForm() {
         username,
         password,
         redirect: false,
+        callbackUrl: "/feed",
       });
 
       if (!loginResult || loginResult.error) {
@@ -63,8 +62,7 @@ export default function RegisterForm() {
       setStatus("success");
       const createdUsername = result?.user?.username || username;
       setMessage(`Usuario ${createdUsername} creado e ingresado correctamente`);
-      router.push("/feed");
-      router.refresh();
+      window.location.assign(loginResult.url || "/feed");
     } catch {
       setStatus("error");
       setMessage("No se pudo conectar con el servidor");

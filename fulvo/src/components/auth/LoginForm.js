@@ -2,11 +2,9 @@
 
 import Link from "next/link";
 import { signIn } from "next-auth/react";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default function LoginForm() {
-  const router = useRouter();
   const [status, setStatus] = useState("idle");
   const [message, setMessage] = useState("");
 
@@ -24,6 +22,7 @@ export default function LoginForm() {
         username,
         password,
         redirect: false,
+        callbackUrl: "/feed",
       });
 
       if (!result || result.error) {
@@ -34,8 +33,7 @@ export default function LoginForm() {
 
       setStatus("success");
       setMessage("Sesion iniciada correctamente");
-      router.push("/feed");
-      router.refresh();
+      window.location.assign(result.url || "/feed");
     } catch {
       setStatus("error");
       setMessage("No se pudo conectar con el servidor");

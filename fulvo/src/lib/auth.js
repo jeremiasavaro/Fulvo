@@ -3,6 +3,7 @@ import bcrypt from "bcryptjs";
 import { getUserByUsername } from "@/lib/db";
 
 export const authOptions = {
+  secret: process.env.AUTH_SECRET || process.env.NEXTAUTH_SECRET,
   session: {
     strategy: "jwt",
     // Keep users logged in for 30 days unless they explicitly sign out.
